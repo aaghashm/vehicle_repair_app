@@ -15,7 +15,7 @@ import './Tips.css'; // Reusing the Tips CSS for styling
     ];
 
     const fetchYouTubeVideos = async (query) => {
-    const API_KEY = 'AIzaSyDM-WiieymuKfXivzijnhmD9hDAN2FK0lk';
+    const API_KEY = 'your key';
 
     try {
     const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
