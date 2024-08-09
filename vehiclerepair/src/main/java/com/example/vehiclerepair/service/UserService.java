@@ -4,36 +4,54 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.vehiclerepair.model.User;
 import com.example.vehiclerepair.repository.UserRepository;
+import com.example.vehiclerepair.security.CustomUserDetails;
+import com.example.vehiclerepair.security.JwtUtil;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
-
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    private JwtUtil jwtUtil;
+
+    @Override
+    public UserDetails loadUserByUsername(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        return new CustomUserDetails(user); // Return a CustomUserDetails object
     }
 
     public void registerUser(User user) {
-        // Encode password before saving
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        // Save user to the database
+        // Removed password encoding
         userRepository.save(user);
     }
 
+    public String loginUser(String email, String password) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        // Skipped password checking
+        if (user != null) {
+            return jwtUtil.generateToken(email);
+        }
+        return null;
+    }
+
+    public UserDetails findByEmailUD(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+        return new CustomUserDetails(user);
+    }
+
     public User findByEmail(String email) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        return userOptional.orElse(null); // or handle as needed
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     public User saveUser(User user) {
@@ -55,5 +73,4 @@ public class UserService {
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }
-    // Add more business logic as needed
 }

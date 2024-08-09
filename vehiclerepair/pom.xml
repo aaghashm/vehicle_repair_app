@@ -103,17 +103,6 @@
             <version>2.1.0</version>
         </dependency>
         
-        <!-- Springfox Swagger (Comment this out if using Springdoc)
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.9.2</version>
-        </dependency> -->
     </dependencies>
 
     <build>
