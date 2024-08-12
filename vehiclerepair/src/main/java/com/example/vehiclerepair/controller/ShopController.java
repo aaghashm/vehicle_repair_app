@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.vehiclerepair.model.Shop;
 import com.example.vehiclerepair.service.ShopService;
 
+@CrossOrigin(origins = "http://localhost:3002")
 @RestController
 @RequestMapping("/api/shops")
 public class ShopController {
@@ -36,15 +38,17 @@ public class ShopController {
     }
 
     @PostMapping
-    public Shop createShop(@RequestBody Shop shop) {
-        return shopService.createOrUpdateShop(shop);
+    public ResponseEntity<Shop> createShop(@RequestBody Shop shop) {
+        Shop createdShop = shopService.createOrUpdateShop(shop);
+        return ResponseEntity.ok(createdShop);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Shop> updateShop(@PathVariable Long id, @RequestBody Shop shop) {
         if (shopService.getShopById(id).isPresent()) {
-            shop.setShopID(id);
-            return ResponseEntity.ok(shopService.createOrUpdateShop(shop));
+            shop.setShopID(id); // Ensure the shop ID is set for the update
+            Shop updatedShop = shopService.createOrUpdateShop(shop);
+            return ResponseEntity.ok(updatedShop);
         }
         return ResponseEntity.notFound().build();
     }

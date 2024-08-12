@@ -1,5 +1,6 @@
 package com.example.vehiclerepair.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,10 @@ public class AdminService {
 
     public Admin saveAdmin(Admin admin) {
         return adminRepository.save(admin);
+    }
+
+    public List<Admin> findAllAdmins() {
+        return adminRepository.findAll();
     }
 
     public Optional<Admin> findAdminById(Long id) {

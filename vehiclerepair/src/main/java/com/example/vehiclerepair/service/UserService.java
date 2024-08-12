@@ -44,6 +44,23 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null); // Use .orElse(null) to handle Optional
+    }
+
+    public User updateUser(Long id, User user) {
+        // Retrieve the existing user
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Update fields as needed
+        existingUser.setName(user.getName());
+        existingUser.setEmail(user.getEmail());
+        // Update other fields here
+
+        // Save the updated user
+        return userRepository.save(existingUser);
+    }
     public UserDetails findByEmailUD(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));

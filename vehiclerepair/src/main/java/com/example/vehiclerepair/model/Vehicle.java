@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Vehicle {
@@ -28,9 +26,8 @@ public class Vehicle {
     @Column(name = "TotalKm", nullable = false)
     private int totalKm;
 
-    @ManyToOne
-    @JoinColumn(name = "UserID")
-    private User user;
+    @Column(name = "UserEmail", nullable = false, length = 100)
+    private String userEmail;
 
     // Getters and setters
     public Long getId() {
@@ -73,11 +70,11 @@ public class Vehicle {
         this.totalKm = totalKm;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 }
