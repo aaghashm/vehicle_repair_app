@@ -35,12 +35,7 @@ function App() {
               <Route path="/local-service-shop" element={<LocalServiceShop />} />
               <Route path="/tips" element={<Tips />} />
               <Route path="/safety" element={<Safety />} />
-          {userType === 'user' && (
-            <>
-              
-              <Route path="/booking" element={<BookingPage />} />
-            </>
-          )}
+          {userType === 'user' && (<Route path="/booking" element={<BookingPage />} />)}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
