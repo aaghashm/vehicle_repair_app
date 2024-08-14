@@ -7,6 +7,8 @@ const API_URL_USERS = 'http://127.0.0.1:8080/api/users';
 const API_URL_VEHICLES = 'http://127.0.0.1:8080/api/vehicles';
 const API_URL_SHOPS = 'http://127.0.0.1:8080/api/shops';
 const API_URL_ADMINS = 'http://127.0.0.1:8080/api/admins';
+const API_URL_BOOKINGS = 'http://127.0.0.1:8080/api/bookings';
+
 
 function AdminPage() {
   const navigate = useNavigate();
@@ -29,6 +31,10 @@ function AdminPage() {
   const [adminForm, setAdminForm] = useState({ adminID: '', name: '', email: '', phone: '', password: '' });
   const [editAdminMode, setEditAdminMode] = useState(false);
 
+  const [bookings, setBookings] = useState([]);
+const [bookingForm, setBookingForm] = useState({ bookingID: '', brand: '', city: '', completed: false, problemDescription: '', user: { email: '',name: ''  } });
+const [editBookingMode, setEditBookingMode] = useState(false);
+  
   useEffect(() => {
     fetchUsers();
     fetchVehicles();
@@ -51,6 +57,14 @@ function AdminPage() {
   };
 
   const handleUserFormChange = (e) => handleFormChange(e, setUserForm);
+const fetchBookings = async () => {
+  await fetchData(API_URL_BOOKINGS, setBookings);
+  console.log(bookings);
+};
+
+useEffect(() => {
+  fetchBookings();
+}, []);
 
   const handleUserSave = async () => {
     const method = editUserMode ? 'PUT' : 'POST';
@@ -86,6 +100,24 @@ function AdminPage() {
     setEditVehicleMode(true);
     setActiveSection('Vehicles');
   };
+  const handleBookingFormChange = (e) => handleFormChange(e, setBookingForm);
+
+const handleBookingSave = async () => {
+  const method = editBookingMode ? 'PUT' : 'POST';
+  const endpoint = editBookingMode ? `${API_URL_BOOKINGS}/${bookingForm.bookingID}` : API_URL_BOOKINGS;
+  await handleSave(endpoint, method, bookingForm, setBookings, bookings, editBookingMode, setEditBookingMode, setBookingForm, 'bookingID');
+};
+
+const handleBookingEdit = (booking) => {
+  setBookingForm(booking);
+  setEditBookingMode(true);
+  setActiveSection('Bookings');
+};
+
+const handleBookingDelete = async (bookingID) => {
+  await handleDelete(`${API_URL_BOOKINGS}/${bookingID}`, setBookings, bookings, bookingID, 'bookingID');
+};
+
 
   const handleVehicleDelete = async (id) => {
     await handleDelete(`${API_URL_VEHICLES}/${id}`, setVehicles, vehicles, id, 'id');
@@ -169,16 +201,20 @@ function AdminPage() {
       if (response.ok) {
         if (editMode) {
           setData(data.map(item => item[idField] === form[idField] ? result : item));
+          
         } else {
           setData([...data, result]);
         }
         setEditMode(false);
         setForm({});
+        alert('Data saved successfully!');
       } else {
         console.error(`Failed to save data: ${result.message}`);
+        alert(`Failed to save data: ${result.message}`);
       }
     } catch (error) {
       console.error('Error saving data:', error);
+      alert('Error saving data: ' + error.message);
     }
   };
 
@@ -187,23 +223,19 @@ function AdminPage() {
       const response = await fetch(url, { method: 'DELETE' });
       if (response.ok) {
         setData(data.filter(item => item[idField] !== id));
+        alert('Item deleted successfully!');
       } else {
         console.error('Failed to delete');
+        alert('Failed to delete item. Please try again.');
       }
     } catch (error) {
       console.error('Error deleting:', error);
+      alert('Error deleting item: ' + error.message);
     }
   };
 
   return (
     <div className="admin-container">
-      <header className="top-navbar">
-        <h1>Admin Dashboard</h1>
-        <div className="admin-info">
-          <span>{adminName}</span>
-          <button className="logout-button" onClick={handleLogout}>Logout</button>
-        </div>
-      </header>
       <div className="admin-content">
         <nav className="sidebar">
           <ul>
@@ -212,6 +244,8 @@ function AdminPage() {
             <li onClick={() => setActiveSection('Vehicles')}>Vehicles</li>
             <li onClick={() => setActiveSection('Shops')}>Shops</li>
             <li onClick={() => setActiveSection('AdminControl')}>Admin Control</li>
+            <li onClick={() => setActiveSection('Bookings')}>Bookings</li>
+
           </ul>
         </nav>
 
@@ -226,37 +260,71 @@ function AdminPage() {
                 <input type="password" name="password" value={userForm.password} onChange={handleUserFormChange} placeholder="Password" required />
                 <button type="submit">{editUserMode ? 'Update User' : 'Add User'}</button>
               </form>
-              <ul>
-                {users.map(user => (
-                  <li key={user.userID}>
-                    {user.name} ({user.email})
-                    <button onClick={() => handleUserEdit(user)}>Edit</button>
-                    <button onClick={() => handleUserDelete(user.userID)}>Delete</button>
-                  </li>
-                ))}
-              </ul>
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map(user => (
+                    <tr key={user.userID}>
+                      <td>{user.userID}</td>
+                      <td>{user.name}</td>
+                      <td>{user.email}</td>
+                      <td>
+                        <button onClick={() => handleUserEdit(user)}>Edit</button>
+                        <button onClick={() => handleUserDelete(user.userID)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
           {activeSection === 'Vehicles' && (
             <div>
               <h2>Manage Vehicles</h2>
               <form onSubmit={handleVehicleSave}>
+                <input type="text" name="userEmail" value={vehicleForm.userEmail} onChange={handleVehicleFormChange} placeholder="User Email" required />
+                <input type="text" name="totalKm" value={vehicleForm.totalKm} onChange={handleVehicleFormChange} placeholder="Total Km" required />
                 <input type="text" name="vehicleNumber" value={vehicleForm.vehicleNumber} onChange={handleVehicleFormChange} placeholder="Vehicle Number" required />
                 <input type="text" name="vehicleType" value={vehicleForm.vehicleType} onChange={handleVehicleFormChange} placeholder="Vehicle Type" required />
-                <input type="number" name="yearOfBuying" value={vehicleForm.yearOfBuying} onChange={handleVehicleFormChange} placeholder="Year of Buying" required />
-                <input type="number" name="totalKm" value={vehicleForm.totalKm} onChange={handleVehicleFormChange} placeholder="Total Km" required />
-                <input type="email" name="userEmail" value={vehicleForm.userEmail} onChange={handleVehicleFormChange} placeholder="User Email" required />
+                <input type="text" name="yearOfBuying" value={vehicleForm.yearOfBuying} onChange={handleVehicleFormChange} placeholder="Year of Buying" required />
                 <button type="submit">{editVehicleMode ? 'Update Vehicle' : 'Add Vehicle'}</button>
               </form>
-              <ul>
-                {vehicles.map(vehicle => (
-                  <li key={vehicle.id}>
-                    {vehicle.vehicleNumber} ({vehicle.vehicleType})
-                    <button onClick={() => handleVehicleEdit(vehicle)}>Edit</button>
-                    <button onClick={() => handleVehicleDelete(vehicle.id)}>Delete</button>
-                  </li>
-                ))}
-              </ul>
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>User Email</th>
+                    <th>Total Km</th>
+                    <th>Vehicle Number</th>
+                    <th>Vehicle Type</th>
+                    <th>Year of Buying</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {vehicles.map(vehicle => (
+                    <tr key={vehicle.id}>
+                      <td>{vehicle.id}</td>
+                      <td>{vehicle.userEmail}</td>
+                      <td>{vehicle.totalKm}</td>
+                      <td>{vehicle.vehicleNumber}</td>
+                      <td>{vehicle.vehicleType}</td>
+                      <td>{vehicle.yearOfBuying}</td>
+                      <td>
+                        <button onClick={() => handleVehicleEdit(vehicle)}>Edit</button>
+                        <button onClick={() => handleVehicleDelete(vehicle.id)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
           {activeSection === 'Shops' && (
@@ -270,15 +338,35 @@ function AdminPage() {
                 <input type="text" name="phone" value={shopForm.phone} onChange={handleShopFormChange} placeholder="Phone" required />
                 <button type="submit">{editShopMode ? 'Update Shop' : 'Add Shop'}</button>
               </form>
-              <ul>
-                {shops.map(shop => (
-                  <li key={shop.shopID}>
-                    {shop.name} ({shop.city})
-                    <button onClick={() => handleShopEdit(shop)}>Edit</button>
-                    <button onClick={() => handleShopDelete(shop.shopID)}>Delete</button>
-                  </li>
-                ))}
-              </ul>
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Pincode</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {shops.map(shop => (
+                    <tr key={shop.shopID}>
+                      <td>{shop.shopID}</td>
+                      <td>{shop.name}</td>
+                      <td>{shop.address}</td>
+                      <td>{shop.city}</td>
+                      <td>{shop.pincode}</td>
+                      <td>{shop.phone}</td>
+                      <td>
+                        <button onClick={() => handleShopEdit(shop)}>Edit</button>
+                        <button onClick={() => handleShopDelete(shop.shopID)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
           {activeSection === 'AdminControl' && (
@@ -287,21 +375,85 @@ function AdminPage() {
               <form onSubmit={handleAdminSave}>
                 <input type="text" name="name" value={adminForm.name} onChange={handleAdminFormChange} placeholder="Admin Name" required />
                 <input type="email" name="email" value={adminForm.email} onChange={handleAdminFormChange} placeholder="Email" required />
-                <input type="password" name="password" value={adminForm.password} onChange={handleAdminFormChange} placeholder="Password" required />
                 <input type="text" name="phone" value={adminForm.phone} onChange={handleAdminFormChange} placeholder="Phone" required />
+                <input type="password" name="password" value={adminForm.password} onChange={handleAdminFormChange} placeholder="Password" required />
                 <button type="submit">{editAdminMode ? 'Update Admin' : 'Add Admin'}</button>
               </form>
-              <ul>
-                {admins.map(admin => (
-                  <li key={admin.adminID}>
-                    {admin.name} ({admin.email})
-                    <button onClick={() => handleAdminEdit(admin)}>Edit</button>
-                    <button onClick={() => handleAdminDelete(admin.adminID)}>Delete</button>
-                  </li>
-                ))}
-              </ul>
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {admins.map(admin => (
+                    <tr key={admin.adminID}>
+                      <td>{admin.adminID}</td>
+                      <td>{admin.name}</td>
+                      <td>{admin.email}</td>
+                      <td>{admin.phone}</td>
+                      <td>
+                        <button onClick={() => handleAdminEdit(admin)}>Edit</button>
+                        <button onClick={() => handleAdminDelete(admin.adminID)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
+          {activeSection === 'Bookings' && (
+  <div>
+    <h2>Manage Bookings</h2>
+    <form onSubmit={handleBookingSave}>
+  <input type="text" name="brand" value={bookingForm.brand} onChange={handleBookingFormChange} placeholder="Brand" required />
+  <input type="text" name="city" value={bookingForm.city} onChange={handleBookingFormChange} placeholder="City" required />
+  <textarea name="problemDescription" value={bookingForm.problemDescription} onChange={handleBookingFormChange} placeholder="Problem Description" required />
+  <input type="checkbox" name="completed" checked={bookingForm.completed} onChange={(e) => handleBookingFormChange({ target: { name: 'completed', value: e.target.checked } })} /> Completed
+  <input type="text" name="user.email" value={bookingForm.user.email} onChange={handleBookingFormChange} placeholder="User Email" required />
+  <input type="text" name="user.name" value={bookingForm.user.name} onChange={handleBookingFormChange} placeholder="User Name" required /> {/* User Name */}
+  <button type="submit">{editBookingMode ? 'Update Booking' : 'Add Booking'}</button>
+</form>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Brand</th>
+      <th>City</th>
+      <th>Problem Description</th>
+      <th>Completed</th>
+      <th>User Email</th>
+      <th>User Name</th> {/* New column for User Name */}
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {bookings.map(booking => (
+      <tr key={booking.bookingID}>
+        <td>{booking.bookingID}</td>
+        <td>{booking.brand}</td>
+        <td>{booking.city}</td>
+        <td>{booking.problemDescription}</td>
+        <td>{booking.completed ? 'Yes' : 'No'}</td>
+        <td>{booking.user.email}</td>
+        <td>{booking.user.name}</td> {/* Display User Name */}
+        <td>
+          <button onClick={() => handleBookingEdit(booking)}>Edit</button>
+          <button onClick={() => handleBookingDelete(booking.bookingID)}>Delete</button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+  </div>
+)}
+
         </div>
       </div>
     </div>

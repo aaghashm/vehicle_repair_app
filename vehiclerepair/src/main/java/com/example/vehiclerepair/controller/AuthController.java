@@ -18,7 +18,7 @@ import com.example.vehiclerepair.model.User;
 import com.example.vehiclerepair.service.AdminService;
 import com.example.vehiclerepair.service.UserService;
 
-@CrossOrigin(origins = "http://localhost:3002")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

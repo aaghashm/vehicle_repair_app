@@ -4,6 +4,7 @@ import cal from './images/cal.webp';
 import database from './images/database.webp';
 import guide from './images/guide.png';
 import safety from './images/safety.jpg';
+import service from './images/service.jpeg';
 import tips from './images/tips.webp';
 import video from './images/video.jpg';
 import './styles.css';
@@ -24,14 +25,22 @@ function HomePage() {
 
   return (
     <div className="homepage">
-      <center><h1><b><i>Drive it better!!</i></b></h1></center>
-      <p><center>These are the services offered by CS</center></p>
+      <h2 className='header-text' style={{ textAlign: 'center', marginBottom: '20px' ,color:'#fff'}}>
+          Life’s too short to spend it at the repair shop
+      </h2>
       <div className="card-container">
         <Link to="/service-calculator" className="card">
           <img src={cal} alt="Service Calculator" className="card-img" />
           <div className="card-content">
             <h3>Service Calculator</h3>
             <p>Know when to service.</p>
+          </div>
+        </Link>
+        <Link to="/booking" className="card">
+          <img src={service} alt="Book service" className="card-img" />
+          <div className="card-content">
+            <h3>Book a Service</h3>
+            <p>Book a service for your vehicle and view your bookings</p>
           </div>
         </Link>
         <Link to="/guide" className="card">

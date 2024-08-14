@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.vehiclerepair.model.Admin;
 import com.example.vehiclerepair.service.AdminService;
 
-@CrossOrigin(origins = "http://localhost:3002")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/admins")
 public class AdminController {

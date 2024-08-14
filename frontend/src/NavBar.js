@@ -40,12 +40,13 @@ function NavBar() {
     localStorage.removeItem('user');
     setUser(null); // Clear user state on logout
     navigate('/');
-  };
+};
+
 
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <img src={cs1} alt="Company Logo" className="navbar-logo" /> {/* Update with your logo path */}
+        <a href='/'><img src={cs1} alt="Company Logo" className="navbar-logo" /></a> {/* Update with your logo path */}
         <input type="text" className="navbar-search" placeholder="Search..." />
       </div>
       <div className="navbar-right">

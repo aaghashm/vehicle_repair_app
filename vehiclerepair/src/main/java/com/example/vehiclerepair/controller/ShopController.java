@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.vehiclerepair.model.Shop;
 import com.example.vehiclerepair.service.ShopService;
 
-@CrossOrigin(origins = "http://localhost:3002")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/shops")
 public class ShopController {
