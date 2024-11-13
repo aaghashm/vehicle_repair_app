@@ -39,7 +39,8 @@ function NavBar() {
   const handleLogout = () => {
     localStorage.removeItem('user');
     setUser(null); // Clear user state on logout
-    navigate('/');
+    window.alert("logged out Sucessfully");
+    navigate('/login');
 };
 
 
@@ -69,7 +70,9 @@ function NavBar() {
           )}
           {user && (
             <>
-              <li>{user.name} ({userType})</li>
+             <li>
+      <Link to="/profile">{user.name} ({userType})</Link> {/* Link to profile */}
+    </li>
               <li>
                 <button onClick={handleLogout}>Logout</button>
               </li>

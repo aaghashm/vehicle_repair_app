@@ -36,7 +36,7 @@ function Login() {
 
         // Store the token, userType, and email in localStorage
         localStorage.setItem('user', JSON.stringify({ token, email: userEmail, userType }));
-
+        window.alert("Logged in Sucessfully");
         // Redirect based on user type
         if (isAdmin) {
           navigate('/admin');

@@ -25,7 +25,10 @@ public class VehicleService {
     public Vehicle getVehicleById(Long vehicleId) {
         return vehicleRepository.findById(vehicleId).orElse(null);
     }
-
+    public List<Vehicle> getVehiclesByUserEmail(String userEmail) {
+        return vehicleRepository.findByUserEmail(userEmail);
+    }
+    
     public Vehicle saveVehicle(Vehicle vehicle) {
         if (vehicle.getVehicleNumber() == null || vehicle.getVehicleNumber().trim().isEmpty()) {
             throw new IllegalArgumentException("Vehicle number is required");

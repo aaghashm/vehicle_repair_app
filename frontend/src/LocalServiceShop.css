@@ -1,0 +1,128 @@
+/* Overall container styling */
+.local-service-shop {
+    font-family: 'Roboto', sans-serif;
+    max-width: 1200px; /* Expanded width */
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #1e1e2f;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    color: #e0e0e0;
+}
+
+/* Title */
+h2 {
+    font-size: 28px;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Location input field */
+.location-input {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #3a3a50;
+    background-color: #2a2a3b;
+    color: #e0e0e0;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.location-input:focus {
+    outline: none;
+    border-color: #4d7cfe;
+    background-color: #333348;
+}
+
+/* Find Shops Button */
+.find-shops-button {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: #4d7cfe;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.find-shops-button:hover {
+    background-color: #3b5ed7;
+    box-shadow: 0 4px 8px rgba(77, 124, 254, 0.3);
+}
+
+/* Error message */
+.error-message {
+    color: #ff6b6b;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Shop List Table */
+.shop-list {
+    margin-top: 30px;
+}
+
+.shop-list h3 {
+    font-size: 20px;
+    font-weight: 500;
+    color: #d1d1e0;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.shop-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #2a2a3b;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.shop-table th,
+.shop-table td {
+    padding: 14px;
+    text-align: left;
+    border-bottom: 1px solid #3a3a50;
+}
+
+.shop-table th {
+    background-color: #333348;
+    color: #b0b0d6;
+    font-weight: 500;
+}
+
+.shop-table td {
+    color: #cfcfe0;
+}
+
+.shop-table tr:hover {
+    background-color: #3b3b5a;
+    cursor: pointer;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .shop-table th,
+    .shop-table td {
+        padding: 10px;
+    }
+
+    .location-input,
+    .find-shops-button {
+        font-size: 14px;
+    }
+}
+
+.local-service-shop h2{
+    color: #ffffffd2;
+    
+}

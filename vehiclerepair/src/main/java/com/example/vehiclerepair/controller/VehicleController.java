@@ -72,4 +72,11 @@ public class VehicleController {
             return ResponseEntity.notFound().build();
         }
     }
-}
+        
+    @GetMapping("/email/{email}")
+    public ResponseEntity<List<Vehicle>> getVehiclesByUserEmail(@PathVariable String email) {
+        List<Vehicle> vehicles = vehicleService.getVehiclesByUserEmail(email);
+        return vehicles.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(vehicles);
+    }
+
+    }

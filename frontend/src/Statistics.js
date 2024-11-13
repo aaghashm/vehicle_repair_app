@@ -1,4 +1,3 @@
-// src/components/Statistics.js
 import 'chart.js/auto';
 import React, { useEffect, useState } from 'react';
 import { Chart } from 'react-chartjs-2';
@@ -8,6 +7,7 @@ const API_URL_USERS = 'http://127.0.0.1:8080/api/users';
 const API_URL_VEHICLES = 'http://127.0.0.1:8080/api/vehicles';
 const API_URL_SHOPS = 'http://127.0.0.1:8080/api/shops';
 const API_URL_ADMINS = 'http://127.0.0.1:8080/api/admins';
+const API_URL_BOOKINGS = 'http://localhost:8080/api/bookings';  // New URL for bookings
 
 function Statistics() {
     const [userCount, setUserCount] = useState(0);
@@ -18,16 +18,22 @@ function Statistics() {
     const [cities, setCities] = useState([]);
     const [users, setUsers] = useState([]);
     const [admins, setAdmins] = useState([]);
+    const [pendingVehicles, setPendingVehicles] = useState(0);  // New state for pending vehicles
+    const [completedVehicles, setCompletedVehicles] = useState(0);  // New state for completed vehicles
 
     useEffect(() => {
         const fetchCounts = async () => {
             try {
-                const [users, vehicles, shops, admins] = await Promise.all([
-                    fetch(API_URL_USERS).then(res => res.json()),
-                    fetch(API_URL_VEHICLES).then(res => res.json()),
-                    fetch(API_URL_SHOPS).then(res => res.json()),
-                    fetch(API_URL_ADMINS).then(res => res.json())
+                // Fetch all data
+                const [users, vehicles, shops, admins, bookings] = await Promise.all([ 
+                    fetch(API_URL_USERS).then(res => res.json()), 
+                    fetch(API_URL_VEHICLES).then(res => res.json()), 
+                    fetch(API_URL_SHOPS).then(res => res.json()), 
+                    fetch(API_URL_ADMINS).then(res => res.json()), 
+                    fetch(API_URL_BOOKINGS).then(res => res.json()) // Fetch bookings data 
                 ]);
+                
+                // Update counts
                 setUserCount(users.length);
                 setVehicleCount(vehicles.length);
                 setShopCount(shops.length);
@@ -48,6 +54,19 @@ function Statistics() {
                 });
                 setCities(Object.entries(cityCounts).map(([city, count]) => ({ city, count })));
 
+                // Count pending and completed vehicles based on bookings
+                let pendingCount = 0;
+                let completedCount = 0;
+                bookings.forEach(booking => {
+                    if (booking.completed) { // Assuming 0 means pending
+                         completedCount+= 1;
+                    } else{ // Assuming 1 means completed
+                        pendingCount += 1;
+                    }
+                });
+                setPendingVehicles(pendingCount);
+                setCompletedVehicles(completedCount);
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -56,13 +75,27 @@ function Statistics() {
         fetchCounts();
     }, []);
 
+    // Data for new bar chart (Pending vs Completed vehicles)
+    const dataPendingCompletedVehicles = {
+        labels: ['Pending Vehicles', 'Completed Vehicles'],
+        datasets: [
+            {
+                label: 'Vehicles',
+                data: [pendingVehicles, completedVehicles],
+                backgroundColor: ['#4285F4', '#34A853'], // Google standard colors
+                borderColor: '#fff',
+                borderWidth: 1,
+            },
+        ],
+    };
+
     const dataVehicleTypes = {
         labels: vehicleTypes.map(vt => vt.type),
         datasets: [
             {
                 label: 'Vehicle Types',
                 data: vehicleTypes.map(vt => vt.count),
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+                backgroundColor: ['#4285F4', '#EA4335', '#FBBC05', '#34A853'], // Google standard colors
                 borderColor: '#fff',
                 borderWidth: 1,
             },
@@ -75,7 +108,7 @@ function Statistics() {
             {
                 label: 'Count',
                 data: [userCount, adminCount],
-                backgroundColor: ['#FF6384', '#36A2EB'],
+                backgroundColor: ['#4285F4', '#34A853'], // Google standard colors
                 borderColor: '#fff',
                 borderWidth: 1,
             },
@@ -88,7 +121,7 @@ function Statistics() {
             {
                 label: 'Shops by City',
                 data: cities.map(c => c.count),
-                backgroundColor: '#FFCE56',
+                backgroundColor: '#FBBC05', // Google yellow color
                 borderColor: '#fff',
                 borderWidth: 1,
             },
@@ -100,9 +133,11 @@ function Statistics() {
             <h2>Dashboard</h2>
             <div className="stats-summary">
                 <div className="stat-item">Users: {userCount}</div>
+                <div className="stat-item">Admins: {adminCount}</div>
                 <div className="stat-item">Vehicles: {vehicleCount}</div>
                 <div className="stat-item">Shops: {shopCount}</div>
-                <div className="stat-item">Admins: {adminCount}</div>
+                <div className="stat-item">Service Completed: {completedVehicles}</div>
+                <div className="stat-item">Service Pending: {pendingVehicles}</div>
             </div>
             <div className="charts-container">
                 <div className="chart-section chart-section--half">
@@ -123,6 +158,22 @@ function Statistics() {
                         <Chart type="bar" data={dataShopsByCity} options={{ responsive: true, maintainAspectRatio: false }} />
                     </div>
                 </div>
+                <div className="chart-section">
+                    <h3>Pending vs Completed Vehicles</h3>
+                    <div className="chart">
+                        <Chart type="bar" data={dataPendingCompletedVehicles} options={{ responsive: true, maintainAspectRatio: false }} />
+                    </div>
+                </div>
+            </div>
+
+            {/* Display counts with corresponding colors */}
+            <div className="chart-labels">
+                {vehicleTypes.map((vt, index) => (
+                    <div className="chart-label" key={index}>
+                        <div className="chart-color-box" style={{ backgroundColor: ['#4285F4', '#EA4335', '#FBBC05', '#34A853'][index] }}></div>
+                        {vt.type} ({vt.count})
+                    </div>
+                ))}
             </div>
         </div>
     );

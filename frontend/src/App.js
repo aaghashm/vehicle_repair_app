@@ -14,7 +14,8 @@ import ServiceCalculator from './ServiceCalculator';
 import SignUp from './SignUp';
 import './styles.css';
 import Tips from './Tips';
-
+import LoginPrompt from './LoginPrompt';
+import Profile from './profile';
 function App() {
   const user = JSON.parse(localStorage.getItem('user')) || {};
   const userType = user.userType || 'notloggedin';
@@ -34,8 +35,15 @@ function App() {
               <Route path="/video-assistance" element={<BikeRepairGuidelines />} />
               <Route path="/local-service-shop" element={<LocalServiceShop />} />
               <Route path="/tips" element={<Tips />} />
+              <Route path="/prompt" element={<LoginPrompt />} />
               <Route path="/safety" element={<Safety />} />
-          {userType === 'user' && (<Route path="/booking" element={<BookingPage />} />)}
+          {/* {userType === 'user' && (<Route path="/booking" element={<BookingPage />} />)} */}
+          {userType === 'user' ? (
+            <Route path="/booking" element={<BookingPage />} />
+          ) : (
+            <Route path="/booking" element={<Navigate to="/prompt" />} />
+          )}
+<Route path="/profile" element={<Profile />} /> {/* Profile route */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>

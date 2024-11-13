@@ -22,6 +22,7 @@ import './BookingPage.css';
     const response = await fetch(`http://localhost:8080/api/bookings/user?email=${user.email}`);
     const data = await response.json();
     setBookings(data);
+    console.log('Fetched bookings:', data);
     };
 
     const handleChange = (e) => {
@@ -96,7 +97,7 @@ import './BookingPage.css';
                 <p><strong>Vehicle:</strong> {booking.vehicleType} ({booking.brand})</p>
                 <p><strong>Problem:</strong> {booking.problemDescription}</p>
                 <p><strong>City:</strong> {booking.city}</p>
-                <p><strong>Status:</strong> {booking.isCompleted ? 'Completed' : 'Pending'}</p>
+                <p><strong>Status:</strong> {booking.completed ? 'Completed' : 'Pending'}</p>
             </div>
             ))
         )}

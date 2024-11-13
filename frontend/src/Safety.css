@@ -1,77 +1,79 @@
-    /* Global Styles */
-    .safety-container {
+/* Global Styles */
+.safety-container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #f0f0f0;
-    }
+    background-color: #121212;
+}
 
-    .safety-header {
-    background-color: #333;
-    color: #fff;
+.safety-header {
+    background-color: #1e1e1e;
+    color: #ffffff;
     padding: 20px;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .safety-content {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+.safety-container h1{
+    color: #ffffffd2;
+}
+.safety-content {
     flex: 1;
     padding: 20px;
     display: flex;
     justify-content: center;
-    }
+}
 
-    .safety-tips {
+.safety-tips {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     max-width: 1200px;
     width: 100%;
-    }
+}
 
-    .safety-tip-card {
-    background: #fff;
+.safety-tip-card {
+    background: #1e1e1e;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     padding: 20px;
     flex: 1;
     min-width: 300px;
     transition: transform 0.3s, box-shadow 0.3s;
     animation: fadeIn 0.5s ease-out;
-    }
+}
 
-    .safety-tip-card:hover {
+.safety-tip-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+}
 
-    .tip-title {
+.tip-title {
     margin-top: 0;
     font-size: 1.5rem;
-    color: #333;
+    color: #bb86fc;
     position: relative;
     padding-bottom: 10px;
-    }
+}
 
-    .tip-title.highlight {
-    color: #f57c00; /* Orange color for highlighted titles */
+.tip-title.highlight {
+    color: #f57c00;
     border-bottom: 2px solid #f57c00;
-    }
+}
 
-    .tip-detail {
+.tip-detail {
     margin-bottom: 10px;
-    color: #666;
-    }
+    color: #a1a1a1;
+}
 
-    .safety-footer {
-    background-color: #333;
-    color: #fff;
+.safety-footer {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
     padding: 10px;
     text-align: center;
-    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
-    }
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.4);
+}
 
-    @keyframes fadeIn {
+@keyframes fadeIn {
     from {
         opacity: 0;
         transform: translateY(20px);
@@ -80,4 +82,4 @@
         opacity: 1;
         transform: translateY(0);
     }
-    }
+}

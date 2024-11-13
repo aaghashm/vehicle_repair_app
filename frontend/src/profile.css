@@ -1,0 +1,100 @@
+/* Dark Theme Profile Page */
+.profile-page {
+    background-color: #121212;
+    color: #E0E0E0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+  }
+  
+  .profile-container {
+    background-color: #1F1F1F;
+    border-radius: 10px;
+    padding: 40px;
+    width: 100%;
+    max-width: 700px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+  
+  .profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 20px;
+  }
+  
+  .profile-details, .vehicle-section, .bookings-section {
+    margin-top: 30px;
+  }
+  
+  .profile-details p {
+    margin: 5px 0;
+  }
+  
+  h2, h3 {
+    color: #4CAF50;
+    text-align: center;
+  }
+  
+  .vehicle-form input, .vehicle-form button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+  }
+  
+  .vehicle-form input {
+    background-color: #2C2C2C;
+    color: #E0E0E0;
+  }
+  
+  .vehicle-form button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .vehicle-form button:hover {
+    background-color: #3e8e41;
+  }
+  
+  .vehicle-item, .booking-item {
+    background-color: #333;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  input::placeholder {
+    color: #bbb;
+  }
+  .profile-container h2{
+    color: #ffffffd2;
+  }
+  button.expand-button {
+    background: none;
+    border: 2px solid #4CAF50;
+    color: #4CAF50;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: block;
+    margin: 20px auto;
+    width: 100%;
+    transition: 0.3s;
+  }
+  
+  button.expand-button:hover {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
